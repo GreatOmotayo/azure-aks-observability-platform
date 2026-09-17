@@ -1,0 +1,11 @@
+# charts/aduke-monitoring/templates/golden-signals-dashboard-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aduke-golden-signals-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"     # matches sidecar.dashboards.label above
+data:
+  golden-signals.json: |
+    {{ .Files.Get "dashboards/golden-signals.json" | nindent 4 }}

@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: default-webhook-route
+  namespace: monitoring
+spec:
+  route:
+    receiver: teams-webhook
+    groupBy: ['alertname', 'namespace']
+  receivers:
+    - name: teams-webhook
+      webhookConfigs:
+        - urlSecret:
+            name: alertmanager-webhook-raw
+            key: webhook-url

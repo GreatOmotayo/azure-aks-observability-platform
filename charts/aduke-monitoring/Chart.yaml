@@ -1,0 +1,11 @@
+apiVersion: v2
+name: observability
+description: >
+  Wrapper chart around kube-prometheus-stack, adding a custom SecretProviderClass for 
+  Grafana's admin password sourced from key Vault via workload identity
+type: application
+version: 0.1.0
+dependencies:
+  - name: kube-prometheus-stack
+    version: "65.5.1"
+    repository: https://prometheus-community.github.io/helm-charts

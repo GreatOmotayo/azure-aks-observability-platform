@@ -1,0 +1,70 @@
+global:
+  grafanaIdentityClientId: "" # Grafana's managed identity client ID
+  
+keyVaultName: "omotayo-aks-kv"
+keyVaultTenantId: "" 
+kube-prometheus-stack:
+  grafana:
+    serviceAccount:
+      create: true
+      name: grafana
+      annotations:
+        azure.workload.identity/client-id: "REPLACE_WITH_TERRAFORM_OUTPUT" # Grafana's managed identity client ID
+    podLabels:
+      azure.workload.identity/use: "true"
+
+    admin:
+      existingSecret: grafana-admin-credentials
+      userKey: admin-user
+      passwordKey: admin-password
+
+    ingress:
+      enabled: false   # no domain yet — access via kubectl port-forward until DNS is ready
+
+    service:
+      type: ClusterIP
+
+      extraSecretMounts:
+        - name: grafana-admin-secret-mount
+          csi: true
+          csiDriver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: grafana-admin-secret
+          mountPath: /mnt/secrets-store
+
+      additionalDataSources:
+        - name: Azure Monitor
+          type: grafana-azure-monitor-datasource
+          access: proxy
+          jsonData:
+            azureAuthType: workloadidentity
+            subscriptionId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure subscription ID
+            tenantId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure tenant ID
+            clientId: {{ .Values.global.grafanaIdentityClientId }} # Grafana's managed identity client ID
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        folder: /tmp/dashboards
+        searchNamespace: ALL
+  prometheus:
+    prometheusSpec:
+      retention: 15d
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 250m
+        limits:
+          memory: 1Gi
+
+  alertmanager:
+    alertmanagerSpec:
+      alertmanagerConfigSelector:
+        matchLabels:
+          alertmanagerConfig: default
+    config: 
+      route:
+        receiver: 'null'
+      receivers:
+        - name: 'null'
