@@ -1,0 +1,8 @@
+// SLI: percentage of requests completing under the 300ms threshold
+requests
+| where timestamp > ago(30d)
+| summarize
+    totalRequests = count(),
+    fastRequests = countif(duration < 300)
+| extend percentUnder300ms = round( 100.0 * fastRequests / totalRequests, 4)
+| extend errorBudgetRemainingPercent = round( percentUnder300ms - 95.0, 4)

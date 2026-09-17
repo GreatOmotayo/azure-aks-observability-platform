@@ -1,0 +1,19 @@
+// Calculates current error burn rate and projects time to exhaustion
+// for the 99.5%/ 30 day availability SLO
+let sloTargetPercent = 99.5;
+
+let windowHours = 1.0;
+requests
+| where TimeGenerated > ago(1h)
+| summarize
+    totalRequests = count(),
+    failedRequests = countif(success == false)
+| extend currentErrorRatePercent = round( 100.0 * failedRequests / totalRequests, 4 )
+| extend allowedErrorRatePercent = 100.0 - sloTargetPercent
+| extend burnRate = round( currentErrorRatePercent / allowedErrorRatePercent, 2)
+| extend hoursToExhaustBudget = iff(
+    burnRate > 0,
+    round((30.0 * 24.0 ) / burnRate, 1),
+    real(null)
+    )
+| project totalRequests, failedRequests, currentErrorRatePercent, burnRate, hoursToExhaustBudget

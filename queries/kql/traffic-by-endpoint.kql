@@ -1,0 +1,7 @@
+requests
+| where timestamp > ago(1h)
+| summarize
+    requestCount = count()
+    by bin(timestamp, 5m),
+    operation_Name
+| order by timestamp asc, requestCount desc

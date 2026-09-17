@@ -1,0 +1,19 @@
+# Purpose: projects current saturation trend forward using linear regression
+# Answers at this rate, when do we run out of headrooms
+
+predict_linear(
+    ( 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+    )[1h:5m], 
+    4* 3600
+)
+
+# Pod memory saturation, forcast 4 hours out
+predict_linear(
+    (
+        sum(container_memory_working_set_bytes{namespace="production"}) by (pod)
+        /
+        sum(kube_pod_container_resource_limits{namespace="production", resource="memory"}) by (pod)
+        * 100
+    )[1h:5m],
+    4 * 3600
+)

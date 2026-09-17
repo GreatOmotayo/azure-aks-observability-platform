@@ -1,0 +1,7 @@
+exceptions
+| where timestamp > ago(1h)
+| summarize
+    occurrences = count()
+    by problemId, outerMessage, operation_Name
+| order by occurrences desc
+| take 20

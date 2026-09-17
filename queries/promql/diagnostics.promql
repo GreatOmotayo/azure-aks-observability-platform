@@ -1,0 +1,15 @@
+# diagnostics.promql
+# Pre-flight checks for queries/ql/*.promql - run these BEFORE trusting
+# node-cpu-saturation.promql or pod-memory-saturation.promql
+
+# Confirm exporters are being scraped
+up{job=~"node-exporter|kubelet|kube-state-metrics"}
+
+# Confirm Aduke's pods report a memory limit
+kube_pod_container_resource_limits{resource="memory"}
+
+# Inspect raw label sets before trusting by (instance) grouping
+node_cpu_seconds_total
+
+# Confirm the scrape interval 
+scrape_interval

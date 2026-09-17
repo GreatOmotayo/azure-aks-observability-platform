@@ -1,0 +1,9 @@
+// SLI: Percentage of the request that are good (success == true)
+// This is the measured value the availability SLO is judged against
+requests
+| where timestamp > ago(30d)
+| summarize
+    totalRequests = count(),
+    goodRequests = countif(success == true)
+| extend availabilityPercent = round( 100.0 * goodRequests / totalRequests, 4)
+| extend errorBudgetRemainingPercent = round(availabilityPercent - 99.5, 4)

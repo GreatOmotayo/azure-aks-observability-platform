@@ -1,0 +1,24 @@
+// diagnostics.kql
+// Confirm the request table actually has datatable
+requests
+| count
+
+// Confirm the exeception table actually has data
+exceptions
+| count
+
+// View columns name
+requests
+| take 5
+
+// View columns name in exception table
+exceptions
+| take 5
+
+// View columsn name in dependencies table
+dependencies
+| take 5
+
+// Confirm AKS diagnostic logs are flowing into this workspace
+AzureDiagnostics
+| take 5

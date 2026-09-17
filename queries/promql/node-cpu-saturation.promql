@@ -1,0 +1,3 @@
+# node_cpu_saturation.promql
+# Purpose: CPU saturation per node, flags node running hot before it translates into user-facing latency/errors.
+100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)

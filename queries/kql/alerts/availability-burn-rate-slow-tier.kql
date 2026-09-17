@@ -1,0 +1,25 @@
+// --- fast window (30m) 
+let sloTargetPercent = 99.5;
+requests
+| where TimeGenerated > ago(30m)
+| summarize
+    totalRequests = count(),
+    failedRequests = countif(success == false)
+| extend currentErrorRatePercent = round( 100.0 * failedRequests / totalRequests, 4 )
+| extend allowedErrorRatePercent = 100.0 - sloTargetPercent
+| extend burnRate = round( currentErrorRatePercent / allowedErrorRatePercent, 2)
+| where totalRequests > 0
+| project burnRate
+
+// --- slow window (6h) 
+let sloTargetPercent = 99.5;
+requests
+| where TimeGenerated > ago(6h)
+| summarize
+    totalRequests = count(),
+    failedRequests = countif(success == false)
+| extend currentErrorRatePercent = round( 100.0 * failedRequests / totalRequests, 4 )
+| extend allowedErrorRatePercent = 100.0 - sloTargetPercent
+| extend burnRate = round( currentErrorRatePercent / allowedErrorRatePercent, 2)
+| where totalRequests > 0
+| project burnRate

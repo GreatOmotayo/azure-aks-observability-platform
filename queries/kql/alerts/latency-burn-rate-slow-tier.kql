@@ -1,0 +1,22 @@
+// alerts/latency-burn-rate-slow-tier.kql
+// --- fast window (30m)
+let sloTargetPercent = 95.0;
+requests
+| where TimeGenerated > ago(30m)
+| summarize totalRequests = count(), slowRequests = countif(duration >= 300)
+| extend currentSlowRatePercent = round(100.0 * slowRequests / totalRequests, 4)
+| extend allowedSlowRatePercent = 100.0 - sloTargetPercent
+| extend burnRate = round(currentSlowRatePercent / allowedSlowRatePercent, 2)
+| where totalRequests > 0
+| project burnRate
+
+// --- slow window (6h)
+let sloTargetPercent = 95.0;
+requests
+| where TimeGenerated > ago(6h)
+| summarize totalRequests = count(), slowRequests = countif(duration >= 300)
+| extend currentSlowRatePercent = round(100.0 * slowRequests / totalRequests, 4)
+| extend allowedSlowRatePercent = 100.0 - sloTargetPercent
+| extend burnRate = round(currentSlowRatePercent / allowedSlowRatePercent, 2)
+| where totalRequests > 0
+| project burnRate

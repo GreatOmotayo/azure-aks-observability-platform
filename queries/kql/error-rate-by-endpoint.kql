@@ -1,0 +1,9 @@
+requests
+| where timestamp > ago(1h)
+| summarize
+    totalRequests = count(),
+    failedRequests = countif(success == false)
+    by operation_Name
+| extend errorRatePercent = round( 100.0 * failedRequests / totalRequests, 2)
+| where totalRequests > 0
+| order by errorRatePercent desc

@@ -1,0 +1,6 @@
+# pod_memory_saturation.promql
+# Purpose: memory usage as a percentage of each pod's configured limits
+# surfaces pods approaching OOMKill before it actually happens
+sum(container_memory_working_set_bytes{namespace="production"}) by (pod) / 
+sum(kube_pod_container_resource_limits{namespace="production", resource="memory"}) by (pod)
+* 100
