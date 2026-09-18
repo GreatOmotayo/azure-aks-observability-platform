@@ -1,4 +1,4 @@
-name: Terraform
+name: Application Insights Infra
 
 on:
     workflow_dispatch:

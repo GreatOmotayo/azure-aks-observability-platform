@@ -1,4 +1,4 @@
-name: Terraform
+name: Alerts Infra
 
 on:
     workflow_dispatch:
