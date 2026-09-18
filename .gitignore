@@ -1,0 +1,54 @@
+# --- Terraform (applies to both terraform/core/ and terraform/alerts/) ---
+# Local provider cache and state — state lives remotely in omotayotfstate,
+# never locally. Pattern matches both directories since .gitignore rules
+# apply relative to wherever the matched path appears in the repo tree.
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+# --- Terraform variable files ---
+*.tfvars
+!*.tfvars.example
+
+# NOTE: .terraform.lock.hcl is deliberately NOT ignored, in either
+# terraform/core/ or terraform/alerts/ — committed for reproducible
+# provider version resolution across machines/CI runs.
+
+# --- Helm / Grafonnet ---
+# Chart.lock and the pinned kube-prometheus-stack .tgz ARE committed
+# (see DECISIONS.md — ArgoCD needs no live network access to the
+# upstream Helm repo at sync time). Only the Jsonnet vendor/ library
+# source is excluded — regeneratable via `jb install`, and not
+# meaningfully reviewable as a diff.
+charts/*/dashboards/jsonnet/vendor/
+# jsonnetfile.lock.json IS committed, for the same reproducibility
+# reason as .terraform.lock.hcl and Chart.lock.
+
+# --- Secrets / local overrides ---
+# None of this project's real secrets should ever be typed into a
+# committed file — Key Vault + CSI is the actual mechanism — but this
+# is a blanket guard against an accidental local override slipping in.
+*.local.tfvars
+.env
+.env.*
+
+# --- Screenshots working folder ---
+# If you keep a scratch/raw-capture folder before curating final
+# screenshots into the repo's screenshots/ folder, exclude the scratch
+# one specifically here (adjust name to whatever you actually use).
+screenshots/raw/
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
