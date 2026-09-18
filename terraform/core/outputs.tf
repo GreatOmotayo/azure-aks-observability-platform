@@ -25,3 +25,11 @@ output "observability_location" {
 output "application_insight_id" {
   value = azurerm_application_insights.aduke.id
 }
+
+output "subscription_id" {
+  value = data.azurerm_client_config.current.subscription_id
+}
+
+output "tenant_id" {
+  value = data.azurerm_client_config.current.tenant_id
+}
