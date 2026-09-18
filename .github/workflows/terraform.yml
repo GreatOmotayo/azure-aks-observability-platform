@@ -105,3 +105,22 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve
+
+            - name: Populate values.yaml from terraform output
+              working-directory: .
+              run: ./scripts/populate-values.sh
+
+            - name: Open PR with populated values
+              uses: peter-evans/create-pull-request@v8
+              with:
+                commit-message: "chore: populate values.yaml from terraform output"
+                title: "chore: populate values.yaml from terraform output"
+                body: |
+                  Automated placeholder population, run immediately after a
+                  successful `terraform apply`.
+
+                  Requires review and merge before ArgoCD picks this up - this
+                  PR does not auto-merge.
+                branch: "populate-values-${{ github.sha }}"
+                base: main
+                delete-branch: true
