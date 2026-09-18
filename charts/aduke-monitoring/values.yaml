@@ -1,8 +1,9 @@
 global:
-  grafanaIdentityClientId: "" # Grafana's managed identity client ID
-  
+  grafanaIdentityClientId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Grafana's managed identity client ID
+
 keyVaultName: "omotayo-aks-kv"
-keyVaultTenantId: "" 
+keyVaultTenantId: "REPLACE_WITH_TERRAFORM_OUTPUT"
+
 kube-prometheus-stack:
   grafana:
     serviceAccount:
@@ -24,30 +25,32 @@ kube-prometheus-stack:
     service:
       type: ClusterIP
 
-      extraSecretMounts:
-        - name: grafana-admin-secret-mount
-          csi: true
-          csiDriver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: grafana-admin-secret
-          mountPath: /mnt/secrets-store
+    extraSecretMounts:
+      - name: grafana-admin-secret-mount
+        csi: true
+        csiDriver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: grafana-admin-secret
+        mountPath: /mnt/secrets-store
 
-      additionalDataSources:
-        - name: Azure Monitor
-          type: grafana-azure-monitor-datasource
-          access: proxy
-          jsonData:
-            azureAuthType: workloadidentity
-            subscriptionId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure subscription ID
-            tenantId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure tenant ID
-            clientId: {{ .Values.global.grafanaIdentityClientId }} # Grafana's managed identity client ID
+    additionalDataSources:
+      - name: Azure Monitor
+        type: grafana-azure-monitor-datasource
+        access: proxy
+        jsonData:
+          azureAuthType: workloadidentity
+          subscriptionId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure subscription ID
+          tenantId: "REPLACE_WITH_TERRAFORM_OUTPUT" # Azure tenant ID
+          clientId: "{{ .Values.global.grafanaIdentityClientId }}" # Grafana's managed identity client ID
+
     sidecar:
       dashboards:
         enabled: true
         label: grafana_dashboard
         folder: /tmp/dashboards
         searchNamespace: ALL
+
   prometheus:
     prometheusSpec:
       retention: 15d
@@ -63,7 +66,7 @@ kube-prometheus-stack:
       alertmanagerConfigSelector:
         matchLabels:
           alertmanagerConfig: default
-    config: 
+    config:
       route:
         receiver: 'null'
       receivers:
