@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: ""
+    repoURL: "https://github.com/GreatOmotayo/azure-aks-observability-platform"
     targetRevision: main
     path: gitops/apps
     directory:
