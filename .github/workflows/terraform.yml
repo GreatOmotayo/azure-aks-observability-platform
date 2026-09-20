@@ -25,6 +25,7 @@ env:
     ARM_SUBSCRIPTION_ID:                ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     ARM_USE_OIDC:                       true
     TF_VAR_subscription_id:             ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    TF_VAR_grafana_admin_password:      ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
 
 defaults:
     run:

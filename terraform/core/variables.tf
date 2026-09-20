@@ -28,3 +28,8 @@ variable "grafana_service_account_name" {
   default = "grafana-service-account"
 }
 
+variable "grafana_admin_password" {
+  description = "Grafana Password"
+  type = string
+}
+

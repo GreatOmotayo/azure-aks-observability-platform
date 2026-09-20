@@ -49,3 +49,9 @@ resource "azurerm_key_vault_secret" "aduke_app_insights_connection_string" {
   value        = azurerm_application_insights.aduke.connection_string
   key_vault_id = data.terraform_remote_state.aduke.outputs.vault_id
 }
+
+resource "azurerm_key_vault_secret" "grafana_password" {
+  name         = "grafana-admin-password"
+  value        = var.grafana_admin_password
+  key_vault_id = data.terraform_remote_state.aduke.outputs.vault_id
+}
