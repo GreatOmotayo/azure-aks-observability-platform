@@ -58,7 +58,7 @@ local topExceptionsPanel =
 local cpuSaturationPanel =
   timeSeries.new('Node CPU Saturation')
   + timeSeries.queryOptions.withTargets([
-      { datasource: prometheusDs, expr: importstr '../../../../queries/ql/node-cpu-saturation.promql', refId: 'A' },
+      { datasource: prometheusDs, expr: importstr '../../../../queries/promql/node-cpu-saturation.promql', refId: 'A' },
     ])
   + timeSeries.standardOptions.withUnit('percent')
   + timeSeries.standardOptions.thresholds.withSteps([
@@ -70,7 +70,7 @@ local cpuSaturationPanel =
 local memSaturationPanel =
   timeSeries.new('Pod Memory Saturation')
   + timeSeries.queryOptions.withTargets([
-      { datasource: prometheusDs, expr: importstr '../../../../queries/ql/pod-memory-saturation.promql', refId: 'A' },
+      { datasource: prometheusDs, expr: importstr '../../../../queries/promql/pod-memory-saturation.promql', refId: 'A' },
     ])
   + timeSeries.standardOptions.withUnit('percent');
 
