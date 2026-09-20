@@ -21,12 +21,13 @@ kube-prometheus-stack:
       type: ClusterIP
     extraSecretMounts:
       - name: grafana-admin-secret-mount
-        csi: true
-        csiDriver: secrets-store.csi.k8s.io
-        readOnly: true
-        volumeAttributes:
-          secretProviderClass: grafana-admin-secret
         mountPath: /mnt/secrets-store
+        readOnly: true
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: grafana-admin-secret
     additionalDataSources:
       - name: Azure Monitor
         type: grafana-azure-monitor-datasource
