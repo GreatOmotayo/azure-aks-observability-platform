@@ -13,7 +13,6 @@ kube-prometheus-stack:
       azure.workload.identity/use: "true"
     admin:
       existingSecret: grafana-admin-credentials
-      userKey: admin-user
       passwordKey: admin-password
     ingress:
       enabled: false # no domain yet — access via kubectl port-forward until DNS is ready
