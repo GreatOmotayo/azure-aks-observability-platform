@@ -25,7 +25,7 @@ variable "grafana_namespace" {
 variable "grafana_service_account_name" {
   description = "The name of the service account for Grafana's pod"
   type = string
-  default = "grafana-service-account"
+  default = "grafana"
 }
 
 variable "grafana_admin_password" {
