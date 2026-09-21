@@ -37,6 +37,14 @@ resource "azurerm_federated_identity_credential" "grafana" {
   subject                   = "system:serviceaccount:${var.grafana_namespace}:${var.grafana_service_account_name}"
 }
 
+# Grafana's identity needs to read its own admin-password secret via the CSI driver
+resource "azurerm_role_assignment" "grafana_keyvault_secrets_reader" {
+  scope                = data.azurerm_key_vault.aks.id
+  role_definition_name = "Key Vault Secrets User"   # read-only, least privilege
+  principal_id         = azurerm_user_assigned_identity.grafana.principal_id
+}
+
+
 # ---- Log Analytics Reader
 resource "azurerm_role_assignment" "grafana_log_reader" {
   scope                = data.terraform_remote_state.logging.outputs.workspace_id
