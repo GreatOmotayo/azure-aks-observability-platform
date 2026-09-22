@@ -32,6 +32,7 @@ kube-prometheus-stack:
             secretProviderClass: grafana-admin-secret
     additionalDataSources:
       - name: Azure Monitor
+        uid: azure-monitor
         type: grafana-azure-monitor-datasource
         access: proxy
         jsonData:
