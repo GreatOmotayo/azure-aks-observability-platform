@@ -1,7 +1,7 @@
 global:
-  grafanaIdentityClientId: "ab78e402-e5ab-4e6e-972d-35b00dd32fc5" # Grafana's managed identity client ID
+  grafanaIdentityClientId: "TERRAFORM_OUTPUT" # Grafana's managed identity client ID
 keyVaultName: "omotayo-aks-kv"
-keyVaultTenantId: "175d86cd-6e18-4ee9-84a6-c6b0d003ecc9"
+keyVaultTenantId: "TERRAFORM_OUTPUT"
 kube-prometheus-stack:
   grafana:
     grafana.ini:
@@ -37,8 +37,8 @@ kube-prometheus-stack:
         access: proxy
         jsonData:
           azureAuthType: workloadidentity
-          subscriptionId: "81da4d58-2cce-415e-b178-7288e443b4a0" # Azure subscription ID
-          tenantId: "175d86cd-6e18-4ee9-84a6-c6b0d003ecc9" # Azure tenant ID
+          subscriptionId: "TERRAFORM_OUTPUT" # Azure subscription ID
+          tenantId: "TERRAFORM_OUTPUT" # Azure tenant ID
           clientId: "{{ .Values.global.grafanaIdentityClientId }}" # Grafana's managed identity client ID
     sidecar:
       dashboards:
