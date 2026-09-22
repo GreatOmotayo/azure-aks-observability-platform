@@ -4,6 +4,9 @@ keyVaultName: "omotayo-aks-kv"
 keyVaultTenantId: "175d86cd-6e18-4ee9-84a6-c6b0d003ecc9"
 kube-prometheus-stack:
   grafana:
+    grafana.ini:
+      azure:
+        workload_identity_enabled: true
     serviceAccount:
       create: true
       name: grafana
