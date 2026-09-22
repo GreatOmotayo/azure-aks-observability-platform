@@ -111,3 +111,20 @@ jobs:
             - name: Terraform Apply
               run: terraform apply -auto-approve
 
+            - name: Populate values.yaml from fresh terraform output
+              working-directory: .
+              run: bash scripts/populate-values.sh
+
+            - name: Commit and push if values.yaml changed
+              working-directory: .
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+                if git diff --quiet charts/aduke-monitoring/values.yaml; then
+                  echo "No drift detected — values.yaml already current."
+                else
+                  git add charts/aduke-monitoring/values.yaml
+                  git commit -m "chore: auto-sync values.yaml from terraform/core output [skip ci]"
+                  git push
+                fi
+
