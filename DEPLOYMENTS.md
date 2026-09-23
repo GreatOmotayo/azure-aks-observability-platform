@@ -19,20 +19,17 @@ helm dependency update
 This reads `Chart.yaml`'s `dependencies:` block, downloads the pinned
 `kube-prometheus-stack` release from the Prometheus community's Helm
 repo as a `.tgz`, drops it into `charts/aduke-monitoring/charts/`, and
-writes `Chart.lock`. Commit both `Chart.lock` and the `.tgz` — this is
-what makes deploys reproducible and lets ArgoCD render the chart
-without needing live network access to the upstream Helm repo at
-sync time.
+writes `Chart.lock`.
 
 ## The deploy chain
 
 1. **Bootstrap the root Application (one-time, manual):**
 ```bash
-   kubectl apply -f gitops/root-app.yaml
+   kubectl apply -f gitops/observability-root-app.yaml
 ```
    This can't be GitOps-managed itself — someone has to apply it once.
 
-2. **ArgoCD discovers child Applications.** `root-app.yaml` watches
+2. **ArgoCD discovers child Applications.** `observability-root-app.yaml` watches
    `gitops/apps/` (`directory.recurse: true`) and finds
    `aduke-monitoring.yaml`.
 
@@ -43,10 +40,8 @@ sync time.
    template`, combining:
    - Your own `templates/*.yaml` (SecretProviderClasses, AlertmanagerConfig)
    - The `kube-prometheus-stack` subchart's own templates (already
-     written by its maintainers, living inside the `.tgz` — you never
-     see or edit these directly)
-   both driven by `values.yaml` — your top-level keys feed your
-   templates; the nested `kube-prometheus-stack:` block feeds the
+     written by its maintainers, living inside the `.tgz`)
+   both driven by `values.yaml` — the nested `kube-prometheus-stack:` block feeds the
    subchart's templates, scoped automatically by Helm.
 
 5. **ArgoCD applies the rendered manifests** to the `monitoring`

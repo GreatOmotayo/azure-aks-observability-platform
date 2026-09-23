@@ -21,13 +21,6 @@ OTel is vendor-neutral and is the direction Microsoft itself is migrating
 App Insights toward. Costs more setup than auto-instrumentation via the
 classic SDK, but avoids vendor lock-in in the instrumentation layer itself.
 
-**Decision: workload identity for Aduke's App Insights auth, not a
-connection string.**
-Reuses the federated identity already built for `aks-production` — zero
-new secrets. Fallback documented (connection string via K8s Secret) in
-case the OTel Azure Monitor Exporter's Entra ID auth path proved
-under-documented; not needed in practice.
-
 **Decision: saturation lives in Prometheus, not in Aduke's own OTel
 metrics.**
 App Insights answers "is the app healthy" (latency, traffic, errors, all
@@ -59,21 +52,6 @@ Insights doesn't exist until this repo applies, so this repo reaching
 backward to a stable, already-provisioned identity is a cleaner
 dependency direction than the AKS repo reaching forward to a resource
 built after it.
-
-**Decision: `aduke_identity_principal_id` passed as a plain variable
-(via GitHub Actions repository variable), not via `terraform_remote_state`
-into the AKS repo.**
-Unlike the shared logging workspace (deliberately shared platform
-infra, correctly coupled via remote state), Aduke's identity is an
-implementation detail of one app in one other repo — reaching into that
-repo's state for one value is tighter coupling than the relationship
-calls for.
-
-**Decision: `TF_VAR_ADUKE_IDENTITY_PRINCIPAL_ID` as a GitHub Actions
-repository variable, not committed in `terraform.tfvars`.**
-Keeps the real value in exactly one place rather than duplicated across
-a local file and memory of whether it's been updated; avoids a
-placeholder value sitting permanently in git history.
 
 **Decision: `precondition` guard on the role assignment resource,
 checking for both the original placeholder and an empty string.**

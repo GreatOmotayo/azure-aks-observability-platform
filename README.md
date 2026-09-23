@@ -90,6 +90,14 @@ flowchart TB
     style AlertMgr fill:#ffe8cc
 ```
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Grafana dashboard](screenshots/grafana-ui-1.png) | ![Grafana dashboard](screenshots/grafana-ui-2.png) |
+| ![p95 latency trend](screenshots/p95-latency-trends.png) | ![Error rate by endpoint](screenshots/error-rate-by-endpoint.png) |
+| ![Availability SLI](screenshots/sli-availability.png) | ![Latency SLI](screenshots/sli-latency.png) |
+
 ## SLOs
 
 | SLO | Target | Error budget (30-day) |
@@ -127,6 +135,7 @@ queries/ql/   — Prometheus queries (saturation + burn-rate forecast)
 alerts/       — Azure Monitor multi-tier burn-rate alert rules
 runbook/      — incident response docs + the fault injection plan
 postmortem/   — real, timed incident writeup
+screenshots/  — dashboard and query result captures for this README
 ```
 
 ## Documentation
@@ -135,6 +144,7 @@ postmortem/   — real, timed incident writeup
   the ones that were revised
 - `DEPLOYMENT.md` — the actual mechanics of how this chart becomes running
   pods (Helm subchart rendering + ArgoCD app-of-apps, step by step)
+- `VALIDATION.md` — step-by-step deployment and validation checklist
 - `TROUBLESHOOTING.md` — real issues hit during this build
 
 ## CI/CD
