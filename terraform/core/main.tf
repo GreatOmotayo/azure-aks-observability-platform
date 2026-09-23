@@ -52,6 +52,12 @@ resource "azurerm_role_assignment" "grafana_log_reader" {
   principal_id         = azurerm_user_assigned_identity.grafana.principal_id
 }
 
+resource "azurerm_role_assignment" "grafana_app_insights_reader" {
+  scope                = azurerm_application_insights.aduke.id
+  role_definition_name = "Log Analytics Reader"
+  principal_id         = azurerm_user_assigned_identity.grafana.principal_id
+}
+
 resource "azurerm_key_vault_secret" "aduke_app_insights_connection_string" {
   name         = "aduke-app-insights-connection-string"
   value        = azurerm_application_insights.aduke.connection_string
