@@ -4,7 +4,7 @@ let sloTargetPercent = 99.5;
 
 let windowHours = 1.0;
 requests
-| where TimeGenerated > ago(1h)
+| where timestamp > ago(1h)
 | summarize
     totalRequests = count(),
     failedRequests = countif(success == false)

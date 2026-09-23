@@ -2,5 +2,5 @@ requests
 | where timestamp > ago(24h)
 | summarize
     p95Latency = percentile(duration, 95)
-    by bin(TimeGenerated, 15m), operation_Name
+    by bin(timestamp, 15m), operation_Name
 | order by p95Latency desc
