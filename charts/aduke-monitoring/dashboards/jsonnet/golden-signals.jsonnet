@@ -13,6 +13,8 @@ local stat = g.panel.stat;
 // kube-prometheus-stack provisions by default.
 local azureMonitorDs = { type: 'grafana-azure-monitor-datasource', uid: 'azure-monitor' };
 local prometheusDs = { type: 'prometheus', uid: 'prometheus' };
+local appInsightsResourceId = '/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke';
+
 
 // --- Raw KQL target helper ---
 // Azure Monitor Logs targets aren't a typed Grafonnet builder — this
@@ -23,6 +25,7 @@ local kqlTarget(query, refId='A') = {
   queryType: 'Azure Log Analytics',
   azureLogAnalytics: {
     query: query,
+    resource: appInsightsResourceId,
     resultFormat: 'time_series',
   },
 };
