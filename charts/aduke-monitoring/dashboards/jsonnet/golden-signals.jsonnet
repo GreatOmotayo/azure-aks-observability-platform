@@ -82,14 +82,32 @@ local availabilityBudgetPanel =
   + stat.queryOptions.withTargets([
       kqlTarget(importstr '../../../../queries/kql/sli-availability.kql'),
     ])
-  + stat.standardOptions.withUnit('percent');
+  + stat.standardOptions.withOverrides([
+      stat.standardOptions.override.byName.new('availabilityPercent')
+      + stat.standardOptions.override.byName.withPropertiesFromOptions(
+          stat.standardOptions.withUnit('percent')
+        ),
+      stat.standardOptions.override.byName.new('errorBudgetRemainingPercent')
+      + stat.standardOptions.override.byName.withPropertiesFromOptions(
+          stat.standardOptions.withUnit('percent')
+        ),
+    ]);
 
 local latencyBudgetPanel =
   stat.new('Latency Error Budget Remaining')
   + stat.queryOptions.withTargets([
       kqlTarget(importstr '../../../../queries/kql/sli-latency.kql'),
     ])
-  + stat.standardOptions.withUnit('percent');
+  + stat.standardOptions.withOverrides([
+      stat.standardOptions.override.byName.new('percentUnder300ms')
+      + stat.standardOptions.override.byName.withPropertiesFromOptions(
+          stat.standardOptions.withUnit('percent')
+        ),
+      stat.standardOptions.override.byName.new('errorBudgetRemainingPercent')
+      + stat.standardOptions.override.byName.withPropertiesFromOptions(
+          stat.standardOptions.withUnit('percent')
+        ),
+    ]);
 
 // --- Assembly: one row per golden signal, per the layout we designed ---
 dashboard.new('Aduke — Golden Signals')
