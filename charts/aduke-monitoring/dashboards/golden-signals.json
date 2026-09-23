@@ -34,7 +34,8 @@
          "targets": [
             {
                "azureLogAnalytics": {
-                  "query": "requests\n| where timestamp > ago(24h)\n| summarize\n    p95Latency = percentile(duration, 95)\n    by bin(TimeGenerated, 15m), operation_Name\n| order by p95Latency desc",
+                  "query": "requests\n| where timestamp > ago(24h)\n| summarize\n    p95Latency = percentile(duration, 95)\n    by bin(timestamp, 15m), operation_Name\n| order by p95Latency desc",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
@@ -78,6 +79,7 @@
             {
                "azureLogAnalytics": {
                   "query": "requests\n| where timestamp > ago(1h)\n| summarize\n    requestCount = count()\n    by bin(timestamp, 5m),\n    operation_Name\n| order by timestamp asc, requestCount desc",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
@@ -126,6 +128,7 @@
             {
                "azureLogAnalytics": {
                   "query": "requests\n| where timestamp > ago(1h)\n| summarize\n    totalRequests = count(),\n    failedRequests = countif(success == false)\n    by operation_Name\n| extend errorRatePercent = round( 100.0 * failedRequests / totalRequests, 2)\n| where totalRequests > 0\n| order by errorRatePercent desc",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
@@ -156,6 +159,7 @@
             {
                "azureLogAnalytics": {
                   "query": "exceptions\n| where timestamp > ago(1h)\n| summarize\n    occurrences = count()\n    by problemId, outerMessage, operation_Name\n| order by occurrences desc\n| take 20",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
@@ -295,6 +299,7 @@
             {
                "azureLogAnalytics": {
                   "query": "// SLI: Percentage of the request that are good (success == true)\n// This is the measured value the availability SLO is judged against\nrequests\n| where timestamp > ago(30d)\n| summarize\n    totalRequests = count(),\n    goodRequests = countif(success == true)\n| extend availabilityPercent = round( 100.0 * goodRequests / totalRequests, 4)\n| extend errorBudgetRemainingPercent = round(availabilityPercent - 99.5, 4)",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
@@ -330,6 +335,7 @@
             {
                "azureLogAnalytics": {
                   "query": "// SLI: percentage of requests completing under the 300ms threshold\nrequests\n| where timestamp > ago(30d)\n| summarize\n    totalRequests = count(),\n    fastRequests = countif(duration < 300)\n| extend percentUnder300ms = round( 100.0 * fastRequests / totalRequests, 4)\n| extend errorBudgetRemainingPercent = round( percentUnder300ms - 95.0, 4)",
+                  "resource": "/subscriptions/81da4d58-2cce-415e-b178-7288e443b4a0/resourceGroups/rg-aks-observability/providers/Microsoft.Insights/components/appi-aduke",
                   "resultFormat": "time_series"
                },
                "datasource": {
