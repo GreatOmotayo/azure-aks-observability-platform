@@ -283,9 +283,32 @@
             "uid": "-- Mixed --"
          },
          "fieldConfig": {
-            "defaults": {
-               "unit": "percent"
-            }
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "availabilityPercent"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "percent"
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "errorBudgetRemainingPercent"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "percent"
+                     }
+                  ]
+               }
+            ]
          },
          "gridPos": {
             "h": 8,
@@ -319,9 +342,32 @@
             "uid": "-- Mixed --"
          },
          "fieldConfig": {
-            "defaults": {
-               "unit": "percent"
-            }
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "percentUnder300ms"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "percent"
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "errorBudgetRemainingPercent"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "percent"
+                     }
+                  ]
+               }
+            ]
          },
          "gridPos": {
             "h": 8,
